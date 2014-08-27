@@ -18,7 +18,7 @@ describe("Field.", function() {
   });
 
   it("sets colors of tiles", function() {
-    field = new Field(9, 9);
+    var field = new Field(9, 9);
     field.color(1, 2, field.colors.RED);
     field.color(2, 8, field.colors.BLUE);
     expect(field.color(1,2)).to.be.equal(field.colors.RED);
@@ -34,7 +34,7 @@ describe("Field.", function() {
   });
 
   it('gets free tiles', function() {
-    field = new Field(4, 4);
+    var field = new Field(4, 4);
     field.color(1,1, field.colors.RED);
     field.color(2,2, field.colors.RED);
     field.color(3,3, field.colors.BLUE);
@@ -49,10 +49,37 @@ describe("Field.", function() {
 // expect([]).to.be.a('object')
 
 describe('Moving.', function() {
-  it('moves one ball', function() {
-    field = new Field(5,5);
+  it('moves one ball', function(done) {
+    var field = new Field(5,5);
     field.color(1,1, field.colors.RED);
     expect(field.color(2,2)).to.be.equal(null);
-    field.move(1,1,2,2);
+    field.move(1,1,2,2, function(err) {
+      expect(err).to.be.equal(null);
+      done();
+    });
+    expect(field.color(1,1)).to.be.equal(null);
+    expect(field.color(2,2)).to.be.equal(field.colors.RED);
+  });
+
+  it('cannot move from empty tile', function(done) {
+    var field = new Field(4,4);
+    field.move(1,1,2,2, function(err) {
+      expect(err).to.be.not.equal(null);
+      done();
+    });    
+  });
+
+  it('cannot move a barred ball', function(done) {
+    var field = new Field(6,6);
+    field.color(2,0, field.colors.RED);
+    field.color(2,1, field.colors.RED);
+    field.color(2,2, field.colors.RED);
+    field.color(2,3, field.colors.RED);
+    field.color(2,4, field.colors.RED);
+    field.color(2,5, field.colors.RED);
+    field.color(0,0, field.colors.GREEN);
+    field.move(0,0,5,5,function(err) {
+      expect(err).to.be.not.equal(null);
+    });
   });
 });
