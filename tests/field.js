@@ -1,8 +1,7 @@
 var expect = require("chai").expect
-var _ = require('../js/lib/underscore');
 var Field = require('../js/Field.js');
 
-describe("abc", function() {
+describe("Field.", function() {
   it("creates a new field", function() {
     var field = new Field();
   });
@@ -30,8 +29,8 @@ describe("abc", function() {
     expect(field.color(1,2)).to.be.equal(field.colors.GREEN);
     field.color(1, 2, null);
     field.color(2, 8, null);
-    expect(field.color(1,2)).to.be.equal(field.colors.null);
-    expect(field.color(2,8)).to.be.equal(field.colors.null);
+    expect(field.color(1,2)).to.be.equal(null);
+    expect(field.color(2,8)).to.be.equal(null);
   });
 
   it('gets free tiles', function() {
@@ -41,11 +40,19 @@ describe("abc", function() {
     field.color(3,3, field.colors.BLUE);
     expect(field.getFreeTiles()).to.have.length(4*4 - 3);
     field.color(1,1, field.colors.BLUE);
-    expect(field.getFreeTiles()).to.have.length(4*4 - 4);
+    expect(field.getFreeTiles()).to.have.length(4*4 - 3);
     field.color(1,1, null);
     field.color(2,2, null);
-    expect(field.getFreeTiles()).to.have.length(4*4 - 2);
+    expect(field.getFreeTiles()).to.have.length(4*4 - 1);
   });
 })
 // expect([]).to.be.a('object')
 
+describe('Moving.', function() {
+  it('moves one ball', function() {
+    field = new Field(5,5);
+    field.color(1,1, field.colors.RED);
+    expect(field.color(2,2)).to.be.equal(null);
+    field.move(1,1,2,2);
+  });
+});
