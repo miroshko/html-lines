@@ -80,6 +80,31 @@ describe('Moving.', function() {
     field.color(0,0, field.colors.GREEN);
     field.move(0,0,5,5,function(err) {
       expect(err).to.be.not.equal(null);
+      done();
     });
   });
+
+  it('can move an unbarred ball', function(done) {
+    var Field = new Field(7,3);
+    field.color(1,0, field.colors.BLUE);
+    field.color(1,1, field.colors.BLUE);
+    field.color(3,1, field.colors.GREEN);
+    field.color(3,2, field.colors.GREEN);
+    field.color(5,0, field.colors.RED);
+    field.color(5,1, field.colors.RED);
+
+    field.color(0,0, field.colors.BLUE);
+
+    expect(field.color(0,0).to.be.equal(field.colors.BLUE));
+    expect(field.color(5,2).to.be.equal(null));
+
+    field.move(0,0,5,2, function(err) {
+      expect(err).to.be.equal(null);
+      expect(field.color(5,2).to.be.equal(field.colors.BLUE));
+      expect(field.color(0,0).to.be.equal(null));
+      done();
+    })
+  });
+
+
 });
