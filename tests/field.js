@@ -61,6 +61,17 @@ describe('Moving.', function() {
     expect(field.color(2,2)).to.be.equal(field.colors.RED);
   });
 
+  it("cannot move to an occupied cell", function() {
+    var field = new Field(4,4);
+    field.color(1,1,field.colors.RED);
+    field.color(1,2,field.colors.BLUE);
+    field.move(1,2,1,1,function(err) {
+      expect(err).to.be.not.equal(null);
+      expect(field.color(1,1)).to.be.equal(field.colors.RED);
+      expect(field.color(1,2)).to.be.equal(field.colors.BLUE);
+    });
+  });
+
   it('cannot move from empty tile', function(done) {
     var field = new Field(4,4);
     field.move(1,1,2,2, function(err) {
@@ -85,7 +96,7 @@ describe('Moving.', function() {
   });
 
   it('can move an unbarred ball', function(done) {
-    var Field = new Field(7,3);
+    var field = new Field(7,3);
     field.color(1,0, field.colors.BLUE);
     field.color(1,1, field.colors.BLUE);
     field.color(3,1, field.colors.GREEN);
@@ -95,13 +106,13 @@ describe('Moving.', function() {
 
     field.color(0,0, field.colors.BLUE);
 
-    expect(field.color(0,0).to.be.equal(field.colors.BLUE));
-    expect(field.color(5,2).to.be.equal(null));
+    expect(field.color(0,0)).to.be.equal(field.colors.BLUE);
+    expect(field.color(5,2)).to.be.equal(null);
 
-    field.move(0,0,5,2, function(err) {
+    field.move(0,0,6,1, function(err) {
       expect(err).to.be.equal(null);
-      expect(field.color(5,2).to.be.equal(field.colors.BLUE));
-      expect(field.color(0,0).to.be.equal(null));
+      expect(field.color(6,1)).to.be.equal(field.colors.BLUE);
+      expect(field.color(0,0)).to.be.equal(null);
       done();
     })
   });
