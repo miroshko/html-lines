@@ -1,5 +1,18 @@
-var expect = require("chai").expect
-var Field = require('../js/Field.js');
+var requirejs = require('requirejs');
+requirejs.config({
+    nodeRequire: require
+});
+
+var expect = require("chai").expect;
+var setup = require('mocha').setup
+
+var Field;
+setup(function(done) {
+  requirejs(['../js/Field'], function(Field_) {
+    Field = Field_;
+    done();
+  })
+});
 
 describe("Field.", function() {
   it("creates a new field", function() {
@@ -111,6 +124,7 @@ describe('Moving.', function() {
 
     field.move(0,0,6,1, function(err) {
       expect(err).to.be.equal(null);
+      console.log(field.distances.toString())
       expect(field.color(6,1)).to.be.equal(field.colors.BLUE);
       expect(field.color(0,0)).to.be.equal(null);
       done();
