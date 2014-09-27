@@ -1,3 +1,5 @@
+"use strict";
+
 var requirejs = require('requirejs');
 requirejs.config({
     nodeRequire: require

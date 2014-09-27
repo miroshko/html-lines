@@ -7,10 +7,10 @@
   </head>
   <body>
     
-    <div>
-      <div v-repeat="rows" class="field">
-        <div v-repeat="cols" class="tile">
-          
+    <div  id="field">
+      <div v-repeat="cells" class="row">
+        <div v-repeat="$value" v-component="field-cell" class="tile {{ color }}">
+         
         </div>
       </div>
     </div>

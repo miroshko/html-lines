@@ -1,3 +1,5 @@
+"use strict";
+
 require.config({
   baseUrl: 'js',
   paths: {
@@ -7,6 +9,13 @@ require.config({
 }); 
 
 
-require(['Field'], function(Field) {
-  field = new Field(9, 9);  
+require(['models/Field', 'components/Field'], function(Field, VueField) {
+  var field = new Field(9, 9);  
+
+  var fieldView = new VueField({
+    el: '#field',
+    data: field
+  });
+
+  window.FLD = field;
 });
