@@ -10,7 +10,7 @@ var setup = require('mocha').setup
 
 var Field;
 setup(function(done) {
-  requirejs(['../js/Field'], function(Field_) {
+  requirejs(['../js/models/Field'], function(Field_) {
     Field = Field_;
     done();
   })
