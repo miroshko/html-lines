@@ -9,8 +9,11 @@ require.config({
 }); 
 
 
-require(['models/Field', 'components/Field'], function(Field, VueField) {
+require(['models/Field', 'controllers/Lines', 'components/Field'], function(Field, Lines, VueField) {
   var field = new Field(9, 9);  
+  var lines = new Lines({
+    field: field
+  });
 
   var fieldView = new VueField({
     el: '#field',
@@ -18,4 +21,5 @@ require(['models/Field', 'components/Field'], function(Field, VueField) {
   });
 
   window.FLD = field;
+  window.LNS = lines;
 });

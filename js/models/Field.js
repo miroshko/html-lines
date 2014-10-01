@@ -47,7 +47,6 @@ define(['lodash'], function(_) {
     };
 
     this.getPath = function(from_y, from_x, to_y, to_x)  {
-      console.log("===")
       var dx,dy,i,j,
           weights = [],
           iteration = 0,
