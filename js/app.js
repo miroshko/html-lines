@@ -20,6 +20,8 @@ require(['models/Field', 'controllers/Lines', 'components/Field'], function(Fiel
     data: field
   });
 
+  lines.nextTurn();
+
   window.FLD = field;
   window.LNS = lines;
 });

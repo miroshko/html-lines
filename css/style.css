@@ -2,7 +2,7 @@
 
 }
 
-.tile {
+.field-cell {
   display: inline-block;
   position: relative;
   width: 40px;
@@ -11,13 +11,30 @@
   word-wrap: break-word;
 }
 
-.ball {
-  width: 80%;
-  height: 80%;
-  border-radius: 40%;
+.cell {
+  position: relative;
   display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 
-.ball-red {
-  background: red;
+.ball {
+  position: absolute;
+  display: inline-block;
+  width: 80%;
+  height: 80%;  
+  left: 10%;
+  top: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background: #ccc;
+}
+
+.ball.red {
+  background: #f00;
+}
+
+.selected {
+  border: 3px solid #0f0;
 }
