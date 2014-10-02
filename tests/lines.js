@@ -22,6 +22,8 @@ describe('Lines Game', function() {
   setup(function() {
     field = new Field(9,9);
     game = new Lines({field: field});
+    
+    Math.random = require("./helpers/seeded_random")(100);
   });
 
   it('creates a new game', function() {
