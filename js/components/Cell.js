@@ -1,8 +1,8 @@
 define(['vue'], function(Vue) {
   return Vue.extend({
     // @todo: move to tpls
-    template: '<span class="cell" v-on="click: moveSelectedHere">' +
-      '<span class="{{ color }}" v-on="click: select" v-class="ball: color, selected: selected" v-on="click:onClick">' +
+    template: '<span class="cell" v-on="click: moveSelectedHere" v-class="selected: selected">' +
+      '<span class="{{ color }}" v-on="click: select" v-class="ball: color" v-on="click:onClick">' +
       '</span>' +
     '</span>', 
     computed: {

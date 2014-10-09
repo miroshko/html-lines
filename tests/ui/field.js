@@ -4,11 +4,12 @@ var webdriver = require('selenium-webdriver');
 
 var HARDCODED_VALUES = {
   tiles_amount: 81
-}
+};
+SELECTED_BALL_REGEXP = /.*\bselected\b.*/;
 
 test.describe('Page with Lines field', function() {
   var seed = 42;
-  var url = 'http://localhost:8000/index.html?seed=' + seed;
+  var url = 'http://localhost:8000/#/seed/' + seed;
   var driver;
 
   test.before(function() {
@@ -19,21 +20,46 @@ test.describe('Page with Lines field', function() {
 
   test.it('sees field with initial balls on it', function() {
     driver.get(url).then(function() {
-      driver.findElements(webdriver.By.className('tile')).then(function(tiles) {
-        expect(tiles).to.have.length(HARDCODED_VALUES.tiles_amount);
-      })
-    }).then(function() {
-      driver.quit();
-    });;
+      return driver.findElements(webdriver.By.className('tile'));
+    }).then(function(tiles) {
+      expect(tiles).to.have.length(HARDCODED_VALUES.tiles_amount);
+    });
   });
 
   test.it('can not select an empty cell', function() {
     driver.get(url).then(function() {
-      driver
+      return driver.findElement(webdriver.By.css('.row:nth-child(1) .tile:nth-child(2) .cell'))
+    }).then(function(tile) {
+      tile.click();
+      expect(tile.getAttribute("class")).to.not.match(SELECTED_BALL_REGEXP);
     });
   });
-  test.it('can select and unselect a ball');
+
+  test.it('can select and unselect a cell with a ball', function() {
+    var tile, ball;
+    driver.get(url).then(function() {
+      return driver.findElement(webdriver.By.css('.row:nth-child(1) .tile:nth-child(3) .cell'))
+    }).then(function(tile_) {
+      tile = tile_;
+      return tile.findElement(webdriver.By.css('.ball')).then(function(ball_) {
+        ball = ball_;
+        ball.click();
+        return tile.getAttribute("class");
+      });
+    }).then(function(className) {
+      expect(className).to.match(SELECTED_BALL_REGEXP);
+      ball.click();
+      return tile.getAttribute("class");
+    }).then(function(className) {
+      expect(className).to.not.match(SELECTED_BALL_REGEXP);
+    });
+  });
+
   test.it('can move selected ball')
   test.it('cannot move unselected ball')
   test.it('gets new balls after each turn')
+
+  test.after(function() {
+    driver.quit();
+  });
 });
