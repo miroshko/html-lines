@@ -99,7 +99,7 @@ test.describe('Page with Lines field', function() {
       expect(origin_cell_balls).to.have.length(0);
     });
   });
-  test.it('cannot move unselected ball')
+
   test.it('gets new balls after each turn')
 
   test.after(function() {

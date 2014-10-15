@@ -31,7 +31,7 @@ require([
 
     var fieldView = new VueField({
       el: '#field',
-      data: field
+      data: lines
     });
 
     lines.nextTurn();
