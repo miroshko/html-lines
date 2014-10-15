@@ -12,6 +12,7 @@ test.describe('Page with Lines field', function() {
   var url = 'http://localhost:8000/#/seed/' + seed;
   var driver;
   var selector_with_ball = '.row:nth-child(1) .tile:nth-child(3) .cell';
+  var selector_with_ball2 = '.row:nth-child(2) .tile:nth-child(4) .cell';
   var selector_without_ball = '.row:nth-child(1) .tile:nth-child(2) .cell';
 
   test.before(function() {
@@ -54,6 +55,25 @@ test.describe('Page with Lines field', function() {
       return tile.getAttribute("class");
     }).then(function(className) {
       expect(className).to.not.match(SELECTED_BALL_REGEXP);
+    });
+  });
+
+  test.it('deselects a ball when other is selected', function() {
+    var tile, ball;
+    driver.get(url).then(function() {
+      return driver.findElement(webdriver.By.css(selector_with_ball + " .ball"));
+    }).then(function(ball_) {
+      ball = ball_;
+      ball.click();
+      return driver.findElement(webdriver.By.css(selector_with_ball2 + " .ball"));
+    }).then(function(ball2_) {
+      ball2_.click();
+      return driver.findElement(webdriver.By.css(selector_with_ball));
+    })
+    .then(function(cell) {
+      return cell.getAttribute('class')
+    }).then(function(className) {
+       expect(className).to.not.match(SELECTED_BALL_REGEXP);
     });
   });
 

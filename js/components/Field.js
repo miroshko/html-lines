@@ -2,6 +2,8 @@ define(['vue', 'components/Cell'], function(Vue, Cell) {
   var Field = Vue.extend({
     created: function() {
       this.$on('selected-cell-set', function(cell) {
+        if (this.$data.selected)
+          this.$data.selected.selected = false;
         this.$data.selected = cell.$data.selected ? cell : null;
       });
       this.$on('move-commanded', function(cell, callback) {
