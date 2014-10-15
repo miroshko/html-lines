@@ -70,10 +70,25 @@ describe('Moving.', function() {
     expect(field.color(2,2)).to.be.equal(null);
     field.move(1,1,2,2, function(err) {
       expect(err).to.be.equal(null);
+      expect(field.color(1,1)).to.be.equal(null);
+      expect(field.color(2,2)).to.be.equal(field.colors.RED);
       done();
     });
-    expect(field.color(1,1)).to.be.equal(null);
-    expect(field.color(2,2)).to.be.equal(field.colors.RED);
+  });
+
+  it('moves one ball two times', function(done) {
+    var field = new Field(9,9);
+    field.color(1,1, field.colors.RED);
+    field.move(1,1,2,2,function(err) {
+      expect(err).to.be.equal(null);
+      field.move(2,2,4,4,function(err) {
+        expect(err).to.be.equal(null);
+        expect(field.color(4,4)).to.be.equal(field.colors.RED);
+        expect(field.color(2,2)).to.be.equal(null);
+        expect(field.color(1,1)).to.be.equal(null);
+      })
+      done();
+    })
   });
 
   it("cannot move to an occupied cell", function() {
@@ -126,7 +141,6 @@ describe('Moving.', function() {
 
     field.move(0,0,6,1, function(err) {
       expect(err).to.be.equal(null);
-      console.log(field.distances.toString())
       expect(field.color(6,1)).to.be.equal(field.colors.BLUE);
       expect(field.color(0,0)).to.be.equal(null);
       done();

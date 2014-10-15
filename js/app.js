@@ -24,6 +24,7 @@ require([
     }
 
     var field = new Field(9, 9);  
+    window.FLD = field;
     var lines = new Lines({
       field: field
     });

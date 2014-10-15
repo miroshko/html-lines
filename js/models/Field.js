@@ -9,7 +9,6 @@ define(['lodash'], function(_) {
     this.width = width;
     this.height = height;
     this.cells = [];
-    this.distances = [];
     this.colors = {
       RED: 'red',
       BLUE: 'blue',
@@ -18,9 +17,7 @@ define(['lodash'], function(_) {
 
     for(var i = 0; i < height; i++) {
       this.cells[i] = [];
-      this.distances[i] = [];  // is used by finding path
       for(var j = 0; j < width; j++) {
-        this.distances[i][j] = null;
         this.cells[i][j] = {
           y: i,
           x: j,
@@ -56,20 +53,28 @@ define(['lodash'], function(_) {
           curr_cell,
           next_cell,
           path_exists = false,
+          distances = [],
           distance;
+
+      distances.toString = function() {
+        var string = this.join("\n");
+        return string;
+      }
 
       walkup:
       while(next_cells.length){
         for(i = 0; i < next_cells.length; i++) {
           curr_cell = next_cells[i];
+          if (!distances[curr_cell.y])
+            distances[curr_cell.y] = [];
           if (curr_cell.y === from_y && curr_cell.x === from_x) {
             path_exists = true;
-            this.distances[curr_cell.y][curr_cell.x] = iteration;
+            distances[curr_cell.y][curr_cell.x] = iteration;
             break walkup;
           }
-          if (this.distances[curr_cell.y][curr_cell.x] !== null || curr_cell.color)
+          if (typeof distances[curr_cell.y][curr_cell.x] != "undefined" || curr_cell.color)
             continue;
-          this.distances[curr_cell.y][curr_cell.x] = iteration;
+          distances[curr_cell.y][curr_cell.x] = iteration;
 
           for(j = 0; j < ds.length; j++) {
             dx = ds[j][1];
@@ -92,7 +97,7 @@ define(['lodash'], function(_) {
         for(j=0; j < ds.length; j++) {
           dx = ds[j][1];
           dy = ds[j][0];
-          if (this.distances[curr_cell.y + dy] && this.distances[curr_cell.y + dy][curr_cell.x + dx] == i - 1) {
+          if (distances[curr_cell.y + dy] && distances[curr_cell.y + dy][curr_cell.x + dx] == i - 1) {
             path.push(curr_cell);
             curr_cell = this.cells[curr_cell.y + dy][curr_cell.x + dx];
           }
@@ -107,12 +112,11 @@ define(['lodash'], function(_) {
       var from = this.cells[from_y][from_x];
       var to = this.cells[to_y][to_x];
       if (!from.color) {
-        error = "empty targtet cell"
+        error = "empty origin cell"
       } else if (to.color) {
-        error = "occupied destination cell"
+        error = "occupied target cell"
       } else {
         path = this.getPath(from_y, from_x, to_y, to_x);
-        console.log(path)
         if (!path) {
           error = "cell not reachable"
         } else {
@@ -122,11 +126,6 @@ define(['lodash'], function(_) {
       }
       callback(error);
     };
-
-    this.distances.toString = function() {
-      var string = this.join("\n");
-      return string;
-    }
 
     this.cells.toString = function() {
       var string = "";
