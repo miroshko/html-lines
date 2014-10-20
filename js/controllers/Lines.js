@@ -47,12 +47,14 @@ define([], function() {
     };
 
     this.nextTurn = function() {
-      var free_tiles = this.field.getFreeTiles();
+      var tiles = this.field.getTiles();
       var balls_to_add = this.getOption(
         this.turns_made == 0 ? Lines.OPTIONS.BALLS_ON_START : Lines.OPTIONS.BALLS_EACH_TURN 
       );
-      var tiles_for_new_balls = free_tiles
-                    .sort(function() { return Math.random() > 0.5 })
+      var free_tiles_shuffled = tiles
+                    .sort(function() { return Math.random() > 0.5; })
+                    .filter(function(item) { return item.color == null; });
+      var tiles_for_new_balls = free_tiles_shuffled
                     .slice(0, balls_to_add);
       tiles_for_new_balls.forEach(function(tile) {
         this.field.color(tile.y, tile.x, this.field.colors.RED);
