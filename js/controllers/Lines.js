@@ -6,6 +6,8 @@ if (typeof define !== 'function') {
 
 define([], function() {
   function Lines(options) {
+    this.selected_cell = null;
+
     this.init = function() {
       options = options ? options : {};
       if (!options.field) {
@@ -45,6 +47,31 @@ define([], function() {
         }
       });
     };
+
+    this.selectCell = function(cell) {
+      cell.selected = !cell.selected;
+      if (this.selected_cell)
+        this.selected_cell.selected = false;
+      this.selected_cell = cell.selected ? cell : null;
+    }
+
+    this.moveSelected = function(cell) {
+      var origin_cell = this.selected_cell;
+      if (!origin_cell || origin_cell == cell)
+        return;
+      var this_ = this;
+      this.field.move(
+        origin_cell.y, origin_cell.x,
+        cell.y, cell.x,
+        function(err) {
+          if (!err) {
+            this_.selected_cell.selected = false;
+            this_.selected_cell = null;
+            this_.nextTurn();
+          }
+        }
+      );
+    }
 
     this.nextTurn = function() {
       var tiles = this.field.getTiles();

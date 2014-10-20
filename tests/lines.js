@@ -71,6 +71,11 @@ describe('Lines Game', function() {
     test_turn_correctness(true);
     game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 5);
     test_turn_correctness();
-    
+  });
+
+  it('bursts required number of balls in a row', function() {
+    game.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
+    game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
+    game.move();
   });
 });

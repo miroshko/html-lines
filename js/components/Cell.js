@@ -16,7 +16,6 @@ define(['vue'], function(Vue) {
         this._select(!this.$data.selected);
       },
       _select: function(value) {
-        this.$data.selected = value;
         this.$dispatch('selected-cell-set', this);
       },
       moveSelectedHere: function() {
