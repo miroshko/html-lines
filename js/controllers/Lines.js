@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define([], function() {
+define(['lib/shuffle'], function(shuffle) {
   function Lines(options) {
     this.selected_cell = null;
 
@@ -55,7 +55,7 @@ define([], function() {
       this.selected_cell = cell.selected ? cell : null;
     }
 
-    this.moveSelected = function(cell) {
+    this.moveSelected = function(cell, callback) {
       var origin_cell = this.selected_cell;
       if (!origin_cell || origin_cell == cell)
         return;
@@ -68,26 +68,40 @@ define([], function() {
             this_.selected_cell.selected = false;
             this_.selected_cell = null;
             this_.nextTurn();
+            if (typeof callback == "function") callback();
           }
         }
       );
     }
 
+    this.findCombinations = function() {
+      
+    }
+
     this.nextTurn = function() {
+      var combinations = this.findCombinations();
+      if (combinations == 0) {
+        this.addBalls();
+      } else {
+        combinations.forEach(function(cell) {
+          cell.color = null;
+        });
+      }
+    };
+
+    this.addBalls = function() {
       var tiles = this.field.getTiles();
       var balls_to_add = this.getOption(
         this.turns_made == 0 ? Lines.OPTIONS.BALLS_ON_START : Lines.OPTIONS.BALLS_EACH_TURN 
       );
-      var free_tiles_shuffled = tiles
-                    .sort(function() { return Math.random() > 0.5; })
-                    .filter(function(item) { return item.color == null; });
-      var tiles_for_new_balls = free_tiles_shuffled
-                    .slice(0, balls_to_add);
+      var x = 0;
+      var free_tiles_shuffled = shuffle(tiles).filter(function(item) { return item.color == null; });
+      var tiles_for_new_balls = free_tiles_shuffled.slice(0, balls_to_add);
       tiles_for_new_balls.forEach(function(tile) {
         this.field.color(tile.y, tile.x, this.field.colors.RED);
       }, this);
       this.turns_made += 1;
-    };
+    }
 
     this.init(options);
   }

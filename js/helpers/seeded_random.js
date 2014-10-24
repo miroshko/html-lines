@@ -2,7 +2,8 @@
 
 var seeded = function(s) {
   return function() {
-    s = Math.sin(s) * 10000; return s - Math.floor(s);
+    // 15 seems to be preciseness that covers all environments
+    s = Math.sin(s).toFixed(15) * 10000; return s - Math.floor(s);
   };
 };
 

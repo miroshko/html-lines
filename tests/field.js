@@ -12,6 +12,7 @@ var Field;
 setup(function(done) {
   requirejs(['../js/models/Field'], function(Field_) {
     Field = Field_;
+    Math.random = require("../js/helpers/seeded_random")(42);
     done();
   })
 });

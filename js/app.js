@@ -28,13 +28,12 @@ require([
     var lines = new Lines({
       field: field
     });
+    lines.nextTurn();
 
     var fieldView = new VueField({
       el: '#field',
       data: lines
     });
-
-    lines.nextTurn();
   }
 
   var routes = {

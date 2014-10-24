@@ -2,7 +2,8 @@
 
 var requirejs = require('requirejs');
 requirejs.config({
-    nodeRequire: require
+    nodeRequire: require,
+    baseUrl: __dirname + '/../js'
 });
 
 var expect = require("chai").expect;
@@ -10,9 +11,10 @@ var setup = require('mocha').setup
 
 var Field, Lines;
 setup(function(done) {
-  requirejs(['../js/models/Field', '../js/controllers/Lines'], function(Field_, Lines_) {
+  requirejs(['models/Field', 'controllers/Lines'], function(Field_, Lines_) {
     Field = Field_;
     Lines = Lines_;
+
     done();
   })
 });
@@ -22,8 +24,7 @@ describe('Lines Game', function() {
   setup(function() {
     field = new Field(9,9);
     game = new Lines({field: field});
-    
-    Math.random = require("../js/helpers/seeded_random")(100);
+    Math.random = require("../js/helpers/seeded_random")(42);
   });
 
   it('creates a new game', function() {
@@ -76,6 +77,20 @@ describe('Lines Game', function() {
   it('bursts required number of balls in a row', function() {
     game.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
     game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
-    game.move();
+    Math.random = require("../js/helpers/seeded_random")(42);
+
+    game.nextTurn();
+
+    game.selectCell(game.field.cells[7][3]);
+    game.moveSelected(game.field.cells[0][2]);
+
+    console.log(game.field.cells+'')
+    expect(game.field.getFreeTiles()).to.have.length(75);
+
+    game.selectCell(game.field.cells[6][3]);
+    game.moveSelected(game.field.cells[0][5]);
+
+    console.log(game.field.cells+'')
+    expect(game.field.getFreeTiles()).to.have.length(81);
   });
 });
