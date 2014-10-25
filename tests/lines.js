@@ -84,13 +84,35 @@ describe('Lines Game', function() {
     game.selectCell(game.field.cells[7][3]);
     game.moveSelected(game.field.cells[0][2]);
 
-    console.log(game.field.cells+'')
     expect(game.field.getFreeTiles()).to.have.length(75);
 
     game.selectCell(game.field.cells[6][3]);
     game.moveSelected(game.field.cells[0][5]);
 
-    console.log(game.field.cells+'')
     expect(game.field.getFreeTiles()).to.have.length(81);
+  });
+
+it('bursts required number of balls in a vertical row', function() {
+    game.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
+    game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
+    Math.random = require("../js/helpers/seeded_random")(42);
+
+    game.nextTurn();
+
+    game.selectCell(game.field.cells[7][3]);
+    game.moveSelected(game.field.cells[1][4]);
+    expect(game.field.getFreeTiles()).to.have.length(75);
+
+    game.selectCell(game.field.cells[6][3]);
+    game.moveSelected(game.field.cells[2][4]);
+    expect(game.field.getFreeTiles()).to.have.length(72);
+    
+    game.selectCell(game.field.cells[0][0]);
+    game.moveSelected(game.field.cells[3][4]);
+    
+    console.log(game.field.cells.toString());
+
+    expect(game.field.getFreeTiles()).to.have.length(77);
+    
   });
 });

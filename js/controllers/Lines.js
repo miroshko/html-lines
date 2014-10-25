@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['lib/shuffle'], function(shuffle) {
+define(['lib/shuffle', 'lodash'], function(shuffle, _) {
   function Lines(options) {
     this.selected_cell = null;
 
@@ -20,6 +20,7 @@ define(['lib/shuffle'], function(shuffle) {
       // defaults
       this.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
       this.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
+      this.setOption(Lines.OPTIONS.COMBINATION_LENGTH, 5);
 
       this.setOptions(options);
     }
@@ -68,23 +69,48 @@ define(['lib/shuffle'], function(shuffle) {
             this_.selected_cell.selected = false;
             this_.selected_cell = null;
             this_.nextTurn();
-            if (typeof callback == "function") callback();
+            if (typeof callback === "function") callback();
           }
         }
       );
     }
 
     this.findCombinations = function() {
-      
+      var row_sets = [this.field.cells, _.zip.apply(_, this.field.cells)];
+      var combinations = [];
+      var current_sequence;
+      var combination_length = this.getOption(Lines.OPTIONS.COMBINATION_LENGTH);
+      var last_color;
+      var tiles;
+      for(var m = 0; m < row_sets.length; m++) {
+        for(var n = 0; n < row_sets[m].length; n++) {
+          tiles = row_sets[m][n];
+          current_sequence = [];
+          for(var i = 0; i < tiles.length; i++) {
+            if(last_color && last_color === tiles[i].color) {
+              current_sequence.push(tiles[i]);
+            } else {
+              if (current_sequence.length >= combination_length) {
+                combinations.push(current_sequence);
+              }
+              current_sequence = [tiles[i]];
+              last_color = tiles[i].color;
+            }
+          }
+        }
+      }
+      return combinations;
     }
 
     this.nextTurn = function() {
       var combinations = this.findCombinations();
-      if (combinations == 0) {
+      if (combinations.length === 0) {
         this.addBalls();
       } else {
-        combinations.forEach(function(cell) {
-          cell.color = null;
+        combinations.forEach(function(combination) {
+          combination.forEach(function(cell) {
+            cell.color = null;
+          });
         });
       }
     };
@@ -108,7 +134,8 @@ define(['lib/shuffle'], function(shuffle) {
 
   Lines.OPTIONS = {
     BALLS_EACH_TURN: 'BALLS_EACH_TURN',
-    BALLS_ON_START: 'BALLS_ON_START'
+    BALLS_ON_START: 'BALLS_ON_START',
+    COMBINATION_LENGTH: 'COMBINATION_LENGTH'
   };
   return Lines;
 });
