@@ -75,8 +75,27 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       );
     }
 
+    function diagonal(rows) {
+      var lines = [];
+      var row_length = rows[0].length;
+      var current;
+      for (var x = -row_length; x < row_length; x++) {
+        current = [];
+        for (var d = 0; d < rows.length; d++) {
+          if (rows[d] && rows[d][x+d])
+            current.push(rows[d][x+d]);
+        }
+        lines.push(current);
+      }
+      return lines;
+    }
+
     this.findCombinations = function() {
-      var row_sets = [this.field.cells, _.zip.apply(_, this.field.cells)];
+      var transposed = _.zip.apply(_, this.field.cells); // vertical
+      var mirrored = this.field.cells.map(function(row) { return row.slice(0).reverse(); })
+      var diagonal_nw = diagonal(this.field.cells);
+      var diagonal_ne = diagonal(mirrored);
+      var row_sets = [this.field.cells, transposed, diagonal_nw, diagonal_ne];
       var combinations = [];
       var current_sequence;
       var combination_length = this.getOption(Lines.OPTIONS.COMBINATION_LENGTH);
@@ -86,15 +105,17 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
         for(var n = 0; n < row_sets[m].length; n++) {
           tiles = row_sets[m][n];
           current_sequence = [];
-          for(var i = 0; i < tiles.length; i++) {
-            if(last_color && last_color === tiles[i].color) {
+
+          // 1 more to cover edge case
+          for(var i = 0; i <= tiles.length; i++) {
+            if(last_color && tiles[i] && last_color === tiles[i].color) {
               current_sequence.push(tiles[i]);
             } else {
               if (current_sequence.length >= combination_length) {
                 combinations.push(current_sequence);
               }
               current_sequence = [tiles[i]];
-              last_color = tiles[i].color;
+              last_color = tiles[i] && tiles[i].color;
             }
           }
         }
@@ -102,16 +123,23 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       return combinations;
     }
 
-    this.nextTurn = function() {
+    this.burstCombinations = function() {
+      var bursted = false;
       var combinations = this.findCombinations();
-      if (combinations.length === 0) {
-        this.addBalls();
-      } else {
-        combinations.forEach(function(combination) {
-          combination.forEach(function(cell) {
-            cell.color = null;
-          });
+      combinations.forEach(function(combination) {
+        bursted = true;
+        combination.forEach(function(cell) {
+          cell.color = null;
         });
+      });
+      return bursted;
+    }
+
+    this.nextTurn = function() {
+      var bursted = this.burstCombinations();
+      if (!bursted) {
+        this.addBalls();
+        this.burstCombinations();
       }
     };
 
