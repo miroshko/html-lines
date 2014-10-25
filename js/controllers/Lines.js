@@ -62,19 +62,15 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       if (!origin_cell || origin_cell == cell)
         return;
       var this_ = this;
-      console.log("selected is being moved")
       this.field.move(
         origin_cell.y, origin_cell.x,
         cell.y, cell.x,
         function(err) {
           if (!err) {
-            console.log("errorless moved")
             this_.selected_cell.selected = false;
             this_.selected_cell = null;
             this_.nextTurn();
             if (typeof callback === "function") callback();
-          } else {
-            console.log("error moving " + err)
           }
         }
       );

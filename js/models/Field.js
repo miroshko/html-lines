@@ -100,6 +100,9 @@ define(['lodash'], function(_) {
         }
       }
 
+      // hacky
+      path.push(this.cells[to_y][to_x])
+
       return path;
     };
 
@@ -108,20 +111,32 @@ define(['lodash'], function(_) {
       var from = this.cells[from_y][from_x];
       var to = this.cells[to_y][to_x];
       if (!from.color) {
-        error = "empty origin cell"
+        return callback("empty origin cell");
       } else if (to.color) {
-        error = "occupied target cell"
+        return callback("occupied target cell");
       } else {
         path = this.getPath(from_y, from_x, to_y, to_x);
         if (!path) {
-          error = "cell not reachable"
+          return callback("cell not reachable");
         } else {
-          to.color = from.color;
-          from.color = null;
+          this.applyPathSmoothly(path, callback);
         }
       }
-      callback(error);
     };
+
+    this.applyPathSmoothly = function(cell_sequence, callback) {
+      function swapTimed(source, target) {
+        if (!target)
+          return callback();
+        setTimeout(function() {
+          target.color = source.color;
+          source.color = null;
+          var index = cell_sequence.indexOf(target);
+          swapTimed(target, cell_sequence[index + 1]);
+        }, 50);
+      }
+      swapTimed(cell_sequence[0], cell_sequence[1])
+    }
 
     this.cells.toString = function() {
       var string = "";

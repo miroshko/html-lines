@@ -6,7 +6,6 @@ define(['vue', 'components/Cell'], function(Vue, Cell) {
         game.selectCell(cell.$data);
       });
       this.$on('move-commanded', function(cell, callback) {
-        console.log("forwarding MV")
         game.moveSelected(cell.$data, callback);
       });
     }
