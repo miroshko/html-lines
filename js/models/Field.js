@@ -9,11 +9,6 @@ define(['lodash'], function(_) {
     this.width = width;
     this.height = height;
     this.cells = [];
-    this.colors = {
-      RED: 'red',
-      BLUE: 'blue',
-      GREEN: 'green'
-    };
 
     for(var i = 0; i < height; i++) {
       this.cells[i] = [];

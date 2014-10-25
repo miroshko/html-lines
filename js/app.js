@@ -28,6 +28,15 @@ require([
     var lines = new Lines({
       field: field
     });
+    lines.setOption(Lines.OPTIONS.COLORS_ENABLED, [
+      Lines.COLORS.RED,
+      Lines.COLORS.BLUE,
+      Lines.COLORS.GREEN,
+      // Lines.COLORS.MAGENTA,
+      // Lines.COLORS.YELLOW,
+      // Lines.COLORS.BROWN,
+      // Lines.COLORS.LIGHTBLUE
+    ]);
     lines.nextTurn();
 
     var fieldView = new VueField({

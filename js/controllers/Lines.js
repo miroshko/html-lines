@@ -21,6 +21,7 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       this.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
       this.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
       this.setOption(Lines.OPTIONS.COMBINATION_LENGTH, 5);
+      this.setOption(Lines.OPTIONS.COLORS_ENABLED, [Lines.COLORS.RED]);
 
       this.setOptions(options);
     }
@@ -101,6 +102,7 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       var combination_length = this.getOption(Lines.OPTIONS.COMBINATION_LENGTH);
       var last_color;
       var tiles;
+
       for(var m = 0; m < row_sets.length; m++) {
         for(var n = 0; n < row_sets[m].length; n++) {
           tiles = row_sets[m][n];
@@ -135,9 +137,19 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       return bursted;
     }
 
+    this.start = function() {
+      if (!this.started) {
+        this.nextTurn();
+      } else {
+        throw new Error("Game already started");
+      }
+      this.started = true;
+    }
+
     this.nextTurn = function() {
       var bursted = this.burstCombinations();
-      if (!bursted) {
+      var field_is_empty = this.field.getTiles().length === this.field.getFreeTiles().length;
+      if (!bursted || field_is_empty) {
         this.addBalls();
         this.burstCombinations();
       }
@@ -152,7 +164,8 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       var free_tiles_shuffled = shuffle(tiles).filter(function(item) { return item.color == null; });
       var tiles_for_new_balls = free_tiles_shuffled.slice(0, balls_to_add);
       tiles_for_new_balls.forEach(function(tile) {
-        this.field.color(tile.y, tile.x, this.field.colors.RED);
+        var random_color = shuffle(this.getOption(Lines.OPTIONS.COLORS_ENABLED))[0];
+        this.field.color(tile.y, tile.x, random_color);
       }, this);
       this.turns_made += 1;
     }
@@ -163,7 +176,18 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
   Lines.OPTIONS = {
     BALLS_EACH_TURN: 'BALLS_EACH_TURN',
     BALLS_ON_START: 'BALLS_ON_START',
-    COMBINATION_LENGTH: 'COMBINATION_LENGTH'
+    COMBINATION_LENGTH: 'COMBINATION_LENGTH',
+    COLORS_ENABLED: 'COLORS_ENABLED'
   };
+
+  Lines.COLORS = {
+    RED: 'red',
+    GREEN: 'green',
+    BLUE: 'blue',
+    YELLOW: 'yellow',
+    MAGENTA: 'magenta',
+    BROWN: 'brown',
+    LIGHTBLUE: 'lightblue'
+  }
   return Lines;
 });

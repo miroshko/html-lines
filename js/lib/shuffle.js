@@ -8,6 +8,10 @@ define([], function() {
   return function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex ;
 
+    if (currentIndex == 1) {
+      return array;
+    }
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
 

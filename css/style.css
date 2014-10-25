@@ -36,6 +36,30 @@ field-cell {
   background: #f00;
 }
 
+.ball.blue {
+  background: #00f;
+}
+
+.ball.green {
+  background: #090;
+}
+
+.ball.magenta {
+  background: #a0a;
+}
+
+.ball.brown {
+  background: #f90;
+}
+
+.ball.lightblue {
+  background: #9ef;
+}
+
+.ball.yellow {
+  background: #ff0;
+}
+
 .selected {
   background: rgba(255,200,129,0.5);
 }
