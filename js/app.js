@@ -32,10 +32,10 @@ require([
       Lines.COLORS.RED,
       Lines.COLORS.BLUE,
       Lines.COLORS.GREEN,
-      // Lines.COLORS.MAGENTA,
-      // Lines.COLORS.YELLOW,
-      // Lines.COLORS.BROWN,
-      // Lines.COLORS.LIGHTBLUE
+      Lines.COLORS.MAGENTA,
+      Lines.COLORS.YELLOW,
+      Lines.COLORS.BROWN,
+      Lines.COLORS.LIGHTBLUE
     ]);
     lines.nextTurn();
 

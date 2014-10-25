@@ -100,8 +100,6 @@ test.describe('Page with Lines field', function() {
     });
   });
 
-  test.it('gets new balls after each turn')
-
   test.after(function() {
     driver.quit();
   });

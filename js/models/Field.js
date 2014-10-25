@@ -22,8 +22,9 @@ define(['lodash'], function(_) {
     }
 
     this.color = function(y, x, color) {
-      if (typeof color != "undefined")
+      if (typeof color != "undefined") {
         this.cells[y][x].color = color;
+      }
       return this.cells[y][x].color;
     }
 
