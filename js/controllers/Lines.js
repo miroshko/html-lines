@@ -193,9 +193,10 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
 
     this.generateRandomColorsSet = function() {
       var amount = this.getOption(Lines.OPTIONS.BALLS_EACH_TURN);
-      var colors_shuffled = shuffle(this.getOption(Lines.OPTIONS.COLORS_ENABLED), this.random);
+      var color;
       for(var i = 0; i < amount; i++) {
-        this.random_colors_queue.push(colors_shuffled[i % colors_shuffled.length]);
+        color = shuffle(this.getOption(Lines.OPTIONS.COLORS_ENABLED), this.random)[0];
+        this.random_colors_queue.push(color);
       }
     }
 
