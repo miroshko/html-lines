@@ -20,13 +20,12 @@ require([
   ], function(Field, Lines, VueField, Director, _) {
 
   var lines_game;
-  var fieldView = new VueField({
-    el: '#field',
-    data: {}
-  });
+  var field_view;
+  var field_container = document.querySelector('#game-container');
 
   function startGame(seed) {
     var field = new Field(9, 9);  
+    
     lines_game = new Lines({
       field: field,
       seed: seed
@@ -35,8 +34,17 @@ require([
     lines_game.setOption(Lines.OPTIONS.COLORS_ENABLED, _.values(Lines.COLORS));
     lines_game.start();
 
-    // replacing data without loosing object reference
-    _.extend(fieldView.$data, lines_game);
+    if (field_view)
+      field_view.$destroy();
+
+    var el = document.createElement('div');
+    field_container.appendChild(el);
+
+    field_view = new VueField({
+      el: el,
+      data: lines_game
+    });
+    console.log(field_view.$el)    
   }
 
   function restartGame() {

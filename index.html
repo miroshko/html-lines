@@ -10,24 +10,8 @@
       <h1>Color Lines</h1>
     </header>    
 
-    <nav class="side-panel">
-      <ul>
-        <li>
-          <a href="#/restart">Restart this game</a>
-        </li>
-        <li>
-          <a href="#/new">Start new game</a>
-        </li>
-      </ul>
-    </nav>
-
-    <div id="field">
-      <aside class="score side-panel">Score: {{ score }}</aside>
-      <div v-repeat="field.cells" class="row">
-        <field-cell v-repeat="$value" class="tile">
-
-        </field-cell>
-      </div>
+    <div id="game-container">
+      
     </div>
 
     <footer>

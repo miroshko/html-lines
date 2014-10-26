@@ -16,6 +16,8 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.sync = !!options.sync;
       this.field = options.field;
       this.seed = options.seed || Math.random();
+      this.score = 0;
+      this.is_over = false;
 
       this._options = {};
 
@@ -161,7 +163,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       return cells.length;
     }
 
-    this.start = this.restart = function() {
+    this.start = function() {
       if (this.turns_made) {
         throw new Error("Game already started");
       }
@@ -169,10 +171,12 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.turns_made = 0;
       this.random = seeded_random(this.seed);
       this.score = 0;
+      this.is_over = false;
       this.nextTurn();
     }
 
     this.restart = function() {
+      console.log(" }} restarting ! {{ ")
       this.field.getTiles().forEach(function(cell) {
         cell.color = null;
       });
@@ -186,8 +190,15 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       if (0 === bursted || field_is_empty) {
         this.addBalls();
         this.burstCombinations();
+        this.checkGameOver();
       }
     };
+
+    this.checkGameOver = function() {
+      if (0 === this.field.getFreeTiles().length) {
+        this.is_over = true;
+      }
+    }
 
     this.addBalls = function() {
       var tiles = this.field.getTiles();

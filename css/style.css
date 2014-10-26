@@ -150,17 +150,18 @@ a:hover {
 nav {
   background: green;
   left: calc(50% - 380px);
+  transition: left 0.5s;
   top: 200px;
-  width: 180px;
-  text-align: left; }
+  width: 180px; }
   nav ul, nav li {
     list-style: none;
     margin: 0;
     padding: 0; }
 
 .score {
-  background: purple;
-  right: calc(50% - 320px);
+  background: #800080;
+  right: calc(50% - 350px);
+  transition: right 0.5s, background-color 0.5s;
   top: 125px;
   width: 150px; }
 
@@ -168,13 +169,24 @@ nav {
   color: #eee;
   position: fixed;
   box-shadow: 7px 6px 30px -10px #000;
-  padding: 10px; }
+  padding: 10px;
+  text-align: left; }
 
 #field {
   box-shadow: 0px 0px 30px 0px #555;
   display: inline-block;
   border-radius: 5px;
   overflow: hidden; }
+
+.game-over .score {
+  right: calc(50% - 85px);
+  background-color: #f00;
+  transition: right 1s, background-color 3s; }
+.game-over nav {
+  left: calc(50% - 100px);
+  transition: left 1s; }
+.game-over .side-panel {
+  z-index: 20; }
 
 field-cell {
   display: inline-block;
