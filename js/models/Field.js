@@ -5,10 +5,11 @@ if (typeof define !== 'function') {
 }
 
 define(['lodash'], function(_) {
-  return function Field(height, width) {
+  return function Field(height, width, options) {
     this.width = width;
     this.height = height;
     this.cells = [];
+    this.options = options || {};
 
     for(var i = 0; i < height; i++) {
       this.cells[i] = [];
@@ -106,6 +107,7 @@ define(['lodash'], function(_) {
       return path;
     };
 
+    // @todo: change to promise
     this.move = function(from_y, from_x, to_y, to_x, callback) {
       var error = null, path;
       var from = this.cells[from_y][from_x];
@@ -119,15 +121,27 @@ define(['lodash'], function(_) {
         if (!path) {
           return callback("cell not reachable");
         } else {
-          this.applyPathSmoothly(path, callback);
+          return this.applyPath(path, callback);
         }
       }
     };
 
+    this.applyPath = function(cell_sequence, callback) {
+      if (this.options.sync) {
+        var target = cell_sequence[cell_sequence.length-1];
+        var source = cell_sequence[0];
+        target.color = source.color;
+        source.color = null;
+        callback();
+      } else {
+        this.applyPathSmoothly(cell_sequence, callback);
+      }
+    }
+
     this.applyPathSmoothly = function(cell_sequence, callback) {
       function swapTimed(source, target) {
         if (!target)
-          return callback();
+          return callback(null);
         setTimeout(function() {
           target.color = source.color;
           source.color = null;

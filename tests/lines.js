@@ -22,11 +22,10 @@ setup(function(done) {
 describe('Lines Game', function() {
   var field, game;
   setup(function() {
-    field = new Field(9,9);
-    game = new Lines({field: field});
+    field = new Field(9,9, {sync: true});
+    game = new Lines({field: field, seed: 42, sync: true});
     game.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
     game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
-    Math.random = require("../js/helpers/seeded_random")(42);
   });
 
   it('creates a new game', function() {
@@ -46,32 +45,39 @@ describe('Lines Game', function() {
     }
   });
 
-  function test_turn_correctness(is_first_turn) {
+  function test_turn_correctness(options) {
+    options = options || {};
     var free_tiles_before = game.field.getFreeTiles().length
-    var tiles_to_fill = game.getOption(
-      is_first_turn ? Lines.OPTIONS.BALLS_ON_START : Lines.OPTIONS.BALLS_EACH_TURN
-    );
-    game.nextTurn();
+    var tiles_to_fill;
+
+    if (options.first) {
+      tiles_to_fill = game.getOption(Lines.OPTIONS.BALLS_ON_START);
+      game.start();
+    } else {
+      tiles_to_fill = game.getOption(Lines.OPTIONS.BALLS_EACH_TURN);
+      game.nextTurn();
+    }
+     
     var free_tiles_after = game.field.getFreeTiles().length;
     expect(free_tiles_before - free_tiles_after).to.be.equal(tiles_to_fill);
   }
 
   it('starts game', function() {
-    test_turn_correctness(true);
+    test_turn_correctness({first: true});
   });
 
   it('starts game with specified balls number', function() {
     game.setOption(Lines.OPTIONS.BALLS_ON_START, 6);
-    test_turn_correctness(true);
+    test_turn_correctness({first: true});
   });
 
   it('continues game', function() {
-    test_turn_correctness(true);
+    test_turn_correctness({first: true});
     test_turn_correctness();
   });
 
   it('continues game with specified ball numbers each turn', function() {
-    test_turn_correctness(true);
+    test_turn_correctness({first: true});
     game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 5);
     test_turn_correctness();
   });

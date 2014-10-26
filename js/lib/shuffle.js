@@ -5,7 +5,7 @@ if (typeof define !== 'function') {
 }
 
 define([], function() {
-  return function shuffle(array) {
+  return function shuffle(array, random_function) {
     var currentIndex = array.length, temporaryValue, randomIndex ;
 
     if (currentIndex == 1) {
@@ -16,7 +16,7 @@ define([], function() {
     while (0 !== currentIndex) {
 
       // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
+      randomIndex = Math.floor(random_function() * currentIndex);
       currentIndex -= 1;
 
       // And swap it with the current element.
