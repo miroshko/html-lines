@@ -173,12 +173,17 @@ nav {
   text-align: left; }
 
 .next-balls {
-  background: #8FBF90;
+  background: #8f8f90;
   opacity: 1;
-  right: calc(50% - 350px);
-  width: 150px;
+  right: calc(50% - 310px);
+  width: 110px;
   top: 350px;
   transition: opacity 1s; }
+  .next-balls .ball {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    margin-left: 5px; }
 
 #field {
   box-shadow: 0px 0px 30px 0px #555;

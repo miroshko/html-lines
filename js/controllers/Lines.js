@@ -17,6 +17,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.seed = options.seed || Math.random();
       this.score = 0;
       this.is_over = false;
+      this.random_colors_queue = [];
 
       this._options = {};
 
@@ -166,6 +167,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.random = seeded_random(this.seed);
       this.score = 0;
       this.is_over = false;
+      this.generateRandomColorsSet();
       this.nextTurn();
       this.field.actualiseVirtualColors();
     }
@@ -183,10 +185,19 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       var field_is_empty = this.field.getTiles().length === this.field.getFreeTiles().length;
       if (0 === bursted || field_is_empty) {
         this.addBalls();
+        this.generateRandomColorsSet();
         this.burstCombinations();
         this.checkGameOver();
       }
     };
+
+    this.generateRandomColorsSet = function() {
+      var amount = this.getOption(Lines.OPTIONS.BALLS_EACH_TURN);
+      var colors_shuffled = shuffle(this.getOption(Lines.OPTIONS.COLORS_ENABLED), this.random);
+      for(var i = 0; i < amount; i++) {
+        this.random_colors_queue.push(colors_shuffled[i % colors_shuffled.length]);
+      }
+    }
 
     this.checkGameOver = function() {
       if (0 === this.field.getFreeTiles().length) {
@@ -204,8 +215,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       var free_tiles_shuffled = shuffle(tiles, this.random).filter(function(item) { return item.color == null; });
       var tiles_for_new_balls = free_tiles_shuffled.slice(0, balls_to_add);
       tiles_for_new_balls.forEach(function(tile) {
-        var colors = _.extend([], this.getOption(Lines.OPTIONS.COLORS_ENABLED));
-        var random_color = shuffle(colors, this.random)[0];
+        var random_color = this.random_colors_queue.shift();
         tile.color = random_color;
       }, this);
       this.turns_made += 1;

@@ -13,7 +13,9 @@ define(['vue', 'components/Cell'], function(Vue, Cell) {
         '</ul>' +
       '</nav>' +
       '<aside class="score side-panel">Score: <span class="score-value">{{ score }}</span></aside>' +
-      '<aside class="next-balls side-panel">Next: </aside>' +
+      '<aside class="next-balls side-panel">Next:' +
+        '<span v-repeat="random_colors_queue" class="ball ball-{{ $value }}"></span>' +
+      '</aside>' +
       '<div>' +
         '<div v-repeat="field.cells" class="row">' +
           '<field-cell v-repeat="$value" class="tile">' +
