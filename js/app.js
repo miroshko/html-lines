@@ -44,7 +44,6 @@ require([
       el: el,
       data: lines_game
     });
-    console.log(field_view.$el)    
   }
 
   function restartGame() {
