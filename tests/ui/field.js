@@ -9,7 +9,7 @@ SELECTED_BALL_REGEXP = /.*\bselected\b.*/;
 
 test.describe('Page with Lines field', function() {
   var seed = 42;
-  var url = 'http://localhost:8000/#/seed/' + seed;
+  var url = 'http://localhost:8000/#/seed/' + seed + '/colors/1';
   var driver;
   var selector_with_ball = '.row:nth-child(1) .tile:nth-child(3) .cell';
   var selector_with_ball2 = '.row:nth-child(2) .tile:nth-child(4) .cell';
@@ -98,6 +98,18 @@ test.describe('Page with Lines field', function() {
     }).then(function(origin_cell_balls) {
       expect(origin_cell_balls).to.have.length(0);
     });
+  });
+
+  // test.it('can restart current game', function() {
+  //   driver.get(url).then(function() {
+  //     return driver.findElement(webdriver.By.css(selector_with_ball + ' .ball'));
+  //   }).then(function(ball) {
+  //     return ball.click();
+  //   }).then(function() {
+  //     return driver.findElement(webdriver.By.css(selector_without_ball))
+  //   }).then(function(tile) {
+  //     tile.click();
+  //   });
   });
 
   test.after(function() {
