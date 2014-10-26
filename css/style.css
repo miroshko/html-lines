@@ -1,16 +1,56 @@
+@import url(http://fonts.googleapis.com/css?family=Audiowide);
+
 @keyframes jump {
-    0% {
-        top: calc(10% + 4px);
-        height: calc(80% - 4px);
-    }
-    50% {
-        top: calc(10% - 2px);
-        height: 80%;
-    }
+  0% {
+    top: calc(10% + 4px);
+    height: calc(80% - 4px);
+  }
+  50% {
+    top: calc(10% - 2px);
+    height: 80%;
+  }
 }
+
+@keyframes burst {
+  0% {
+    top: 10%;    
+  }
+  12% {
+    left: calc(10% - 1px);
+  }
+  25% {
+    left: calc(10% + 1px); 
+  }
+  37% {
+    left: calc(10% - 2px);
+    top: calc(10% - 1px);
+  }
+  50% {
+    left: calc(10% + 2px); 
+    top: calc(10% - 1px);
+  }
+  62% {
+    left: calc(10% - 4px);
+    top: calc(10% + 2px);
+  }
+  75% {
+    left: calc(10% + 4px); 
+    top: calc(10% + 2px);
+  }
+  87% {
+    left: calc(10% - 8px);
+    top: calc(10% - 4px);
+  }
+  100% {
+    left: calc(10% + 8px); 
+    top: calc(10% - 4px);
+  }
+}
+
 
 html {
   background: #111;
+  font-family: 'Audiowide';
 }
 
 body {
@@ -35,7 +75,6 @@ field-cell {
   width: 40px;
   height: 40px;
 }
-
 
 .cell {
   position: relative;
@@ -125,4 +164,8 @@ field-cell {
 
 .selected .ball {
   animation: jump 0.5s infinite;
+}
+
+.in-combination-true {
+  animation: burst 0.2s infinite;
 }

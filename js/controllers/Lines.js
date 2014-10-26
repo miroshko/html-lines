@@ -131,7 +131,11 @@ define(['lib/shuffle', 'lodash'], function(shuffle, _) {
       combinations.forEach(function(combination) {
         bursted = true;
         combination.forEach(function(cell) {
-          cell.color = null;
+          cell.in_combination = true;
+          setTimeout(function() {
+            cell.color = null;
+            cell.in_combination = false;
+          }, 200);
         });
       });
       return bursted;
