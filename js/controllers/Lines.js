@@ -177,6 +177,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
         cell.color = null;
       });
       this.turns_made = 0;
+      this.random_colors_queue = [];
       this.start();
     }
 
@@ -193,9 +194,10 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
 
     this.generateRandomColorsSet = function() {
       var amount = this.getOption(Lines.OPTIONS.BALLS_EACH_TURN);
+      var colors = _.extend([], this.getOption(Lines.OPTIONS.COLORS_ENABLED));
       var color;
       for(var i = 0; i < amount; i++) {
-        color = shuffle(this.getOption(Lines.OPTIONS.COLORS_ENABLED), this.random)[0];
+        color = shuffle(colors, this.random)[0];
         this.random_colors_queue.push(color);
       }
     }
