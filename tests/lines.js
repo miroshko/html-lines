@@ -22,8 +22,8 @@ setup(function(done) {
 describe('Lines Game', function() {
   var field, game;
   setup(function() {
-    field = new Field(9,9, {sync: true});
-    game = new Lines({field: field, seed: 42, sync: true});
+    field = new Field(9, 9);
+    game = new Lines({field: field, seed: 42});
     game.setOption(Lines.OPTIONS.BALLS_ON_START, 3);
     game.setOption(Lines.OPTIONS.BALLS_EACH_TURN, 3);
   });
@@ -110,8 +110,6 @@ it('bursts required number of balls in a vertical row', function() {
     game.selectCell(game.field.cells[0][0]);
     game.moveSelected(game.field.cells[3][4]);
     
-    console.log(game.field.cells.toString());
-
     expect(game.field.getFreeTiles()).to.have.length(77);
     
   });
@@ -208,44 +206,29 @@ it('bursts required number of balls in a vertical row', function() {
     game.start();
 
     game.selectCell(game.field.cells[7][3]);
-    game.moveSelected(game.field.cells[4][1]);
+    game.moveSelected(game.field.cells[1][7]);
 
     game.selectCell(game.field.cells[3][2]);
-    game.moveSelected(game.field.cells[2][1]);
+    game.moveSelected(game.field.cells[1][6]);
 
-    game.selectCell(game.field.cells[1][5]);
-    game.moveSelected(game.field.cells[1][1]);
+    game.selectCell(game.field.cells[0][1]);
+    game.moveSelected(game.field.cells[0][2]);
 
-    expect(game.field.getFreeTiles()).to.have.length(77);
+    game.selectCell(game.field.cells[0][5]);
+    game.moveSelected(game.field.cells[1][4]);
 
-    game.selectCell(game.field.cells[5][8]);
-    game.moveSelected(game.field.cells[1][5]);
+    expect(game.field.getFreeTiles()).to.have.length(74);
 
-    game.selectCell(game.field.cells[5][2]);
+    game.selectCell(game.field.cells[0][2]);
     game.moveSelected(game.field.cells[5][6]);
 
-    game.selectCell(game.field.cells[2][8]);
-    game.moveSelected(game.field.cells[5][8]);
+    game.selectCell(game.field.cells[3][1]);
+    game.moveSelected(game.field.cells[5][4]);
 
-    game.selectCell(game.field.cells[3][2]);
+    game.selectCell(game.field.cells[4][3]);
     game.moveSelected(game.field.cells[5][3]);
 
-    game.selectCell(game.field.cells[3][8]);
-    game.moveSelected(game.field.cells[5][4]);
-
-    game.selectCell(game.field.cells[8][3]);
-    game.moveSelected(game.field.cells[5][1]);
-
-    game.selectCell(game.field.cells[6][3]);
-    game.moveSelected(game.field.cells[5][0]);
-
-    expect(game.field.getFreeTiles()).to.have.length(64);
-
-    game.selectCell(game.field.cells[4][7]);
-    game.moveSelected(game.field.cells[5][4]);
-
-    expect(game.field.getFreeTiles()).to.have.length(69);
-
-  })
+    expect(game.field.getFreeTiles()).to.have.length(65);
+  });
 });
 

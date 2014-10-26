@@ -58,9 +58,6 @@ require([
 
   // @todo:
   // tests for UI:
-  //   - gameover
-  //   - restart
-  //   - new game
   //   - next colors
 
   var routes = {

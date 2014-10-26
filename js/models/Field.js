@@ -17,14 +17,15 @@ define(['lodash'], function(_) {
         this.cells[i][j] = {
           y: i,
           x: j,
-          color: null
+          color: null,
+          color_virtual: null
         };
       }  
     }
 
     this.color = function(y, x, color) {
       if (typeof color != "undefined") {
-        this.cells[y][x].color = color;
+        this.cells[y][x].color = this.cells[y][x].color_virtual = color;
       }
       return this.cells[y][x].color;
     }
@@ -107,49 +108,55 @@ define(['lodash'], function(_) {
       return path;
     };
 
+    this.actualiseVirtualColors = function() {
+      this.getTiles().forEach(function(cell) {
+        cell.color_virtual = cell.color;
+      });
+    }
+
     // @todo: change to promise
     this.move = function(from_y, from_x, to_y, to_x, callback) {
       var error = null, path;
       var from = this.cells[from_y][from_x];
       var to = this.cells[to_y][to_x];
       if (!from.color) {
-        return callback("empty origin cell");
+        throw new Error("empty origin cell");
       } else if (to.color) {
-        return callback("occupied target cell");
+        throw new Error("occupied target cell");
       } else {
         path = this.getPath(from_y, from_x, to_y, to_x);
         if (!path) {
-          return callback("cell not reachable");
+          throw new Error("cell not reachable");
         } else {
           return this.applyPath(path, callback);
         }
       }
     };
 
+    // path is applied instantly, callback is called when
+    // virtual_colors attribute transformation is over
     this.applyPath = function(cell_sequence, callback) {
-      if (this.options.sync) {
-        var target = cell_sequence[cell_sequence.length-1];
-        var source = cell_sequence[0];
-        target.color = source.color;
-        source.color = null;
-        callback();
-      } else {
-        this.applyPathSmoothly(cell_sequence, callback);
-      }
+      var target = cell_sequence[cell_sequence.length-1];
+      var source = cell_sequence[0];
+      target.color = source.color;
+      target.color_virtual = null;
+      source.color_virtual = source.color;
+      source.color = null;
+      this.applyPathSmoothly(cell_sequence, callback);
     }
 
     this.applyPathSmoothly = function(cell_sequence, callback) {
       function swapTimed(source, target) {
         if (!target)
-          return callback(null);
+          return typeof callback == "function" && callback(null);
         setTimeout(function() {
-          target.color = source.color;
-          source.color = null;
+          target.color_virtual = source.color_virtual;
+          source.color_virtual = null;
           var index = cell_sequence.indexOf(target);
           swapTimed(target, cell_sequence[index + 1]);
         }, 50);
       }
-      swapTimed(cell_sequence[0], cell_sequence[1])
+      swapTimed(cell_sequence[0], cell_sequence[1]);
     }
 
     this.cells.toString = function() {

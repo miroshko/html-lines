@@ -1,5 +1,6 @@
 define(['vue', 'components/Cell'], function(Vue, Cell) {
   var Field = Vue.extend({
+    // @todo: move to tpls
     template: '<div id="field" v-class="game-over: is_over">' +
       '<nav class="side-panel">' +
         '<ul>' +
@@ -11,10 +12,13 @@ define(['vue', 'components/Cell'], function(Vue, Cell) {
           '</li>' +
         '</ul>' +
       '</nav>' +
-      '<aside class="score side-panel">Score: {{ score }}</aside>' +
-      '<div v-repeat="field.cells" class="row">' +
-        '<field-cell v-repeat="$value" class="tile">' +
-        '</field-cell>' +
+      '<aside class="score side-panel">Score: <span class="score-value">{{ score }}</span></aside>' +
+      '<aside class="next-balls side-panel">Next: </aside>' +
+      '<div>' +
+        '<div v-repeat="field.cells" class="row">' +
+          '<field-cell v-repeat="$value" class="tile">' +
+          '</field-cell>' +
+        '</div>' +
       '</div>' +
     '</div>',
     created: function() {

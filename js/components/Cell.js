@@ -2,15 +2,9 @@ define(['vue'], function(Vue) {
   return Vue.extend({
     // @todo: move to tpls
     template: '<span class="cell" v-on="click: moveSelectedHere" v-class="selected: selected">' +
-      '<span class="ball ball-{{ color }}" v-on="click: toggleSelected" v-on="click:onClick">' +
+      '<span class="ball ball-{{ color_virtual }}" v-on="click: toggleSelected" v-on="click:onClick">' +
       '</span>' +
     '</span>', 
-    computed: {
-      className: function() {
-        var className = this.$data.color ? "ball ball-" + this.$data.color : "";
-        return className;
-      }
-    },
     methods: {
       toggleSelected: function(e) {
         e.stopPropagation();

@@ -109,8 +109,16 @@ nav {
   position: fixed;
   box-shadow: 7px 6px 30px -10px #000;
   padding: 10px;
-  
   text-align: left;
+}
+
+.next-balls {
+  background: #8FBF90;
+  opacity: 1;
+  right: calc(50% - 350px);
+  width: 150px;
+  top: 350px;
+  transition: opacity 1s;
 }
 
 #field {
@@ -130,6 +138,11 @@ nav {
   nav {
     left: calc(50% - 100px);
     transition: left 1s;
+  }
+
+  .next-balls {
+    opacity: 0;
+    transition: opacity 1s;
   }
 
   .side-panel {

@@ -13,7 +13,6 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       if (!options.field) {
         throw new Error("field argument must be specified");
       }
-      this.sync = !!options.sync;
       this.field = options.field;
       this.seed = options.seed || Math.random();
       this.score = 0;
@@ -70,15 +69,17 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.field.move(
         origin_cell.y, origin_cell.x,
         cell.y, cell.x,
-        function(err) {
-          if (!err) {
-            this_.selected_cell.selected = false;
-            this_.selected_cell = null;
-            this_.nextTurn();
-            if (typeof callback === "function") callback();
-          }
+        function() {
+          setTimeout(function() {
+            this_.field.actualiseVirtualColors();
+          }, 150);
+          if (typeof callback == "function") callback();
         }
       );
+
+      this_.selected_cell.selected = false;
+      this_.selected_cell = null;
+      this_.nextTurn();
     }
 
     function diagonal(rows) {
@@ -148,14 +149,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       var combinations = this.findCombinations();
       var cells = _.unique(_.flatten(combinations));
       cells.forEach(function(cell) {
-        if (this.sync) {
-          bursted
-          cell.color = null;
-        } else {
-          setTimeout(function() {
-            cell.color = null;
-          }, 200);
-        }
+        cell.color = null;
       }, this);
       if (cells.length){
         this.increaseScore(cells.length);
@@ -173,10 +167,10 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       this.score = 0;
       this.is_over = false;
       this.nextTurn();
+      this.field.actualiseVirtualColors();
     }
 
     this.restart = function() {
-      console.log(" }} restarting ! {{ ")
       this.field.getTiles().forEach(function(cell) {
         cell.color = null;
       });
@@ -212,7 +206,7 @@ define(['lib/shuffle', 'lodash', 'helpers/seeded_random'], function(shuffle, _, 
       tiles_for_new_balls.forEach(function(tile) {
         var colors = _.extend([], this.getOption(Lines.OPTIONS.COLORS_ENABLED));
         var random_color = shuffle(colors, this.random)[0];
-        this.field.color(tile.y, tile.x, random_color);
+        tile.color = random_color;
       }, this);
       this.turns_made += 1;
     }
