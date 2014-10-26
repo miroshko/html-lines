@@ -23,16 +23,15 @@ require([
   var field_view;
   var field_container = document.querySelector('#game-container');
 
-  function startGame(seed, colors) {
+  function startGame(seed, color_amount) {
     var field = new Field(9, 9);  
-    
+
     lines_game = new Lines({
       field: field,
       seed: seed
     });
-    window.GAME = lines_game;
 
-    lines_game.setOption(Lines.OPTIONS.COLORS_ENABLED, _.values(Lines.COLORS).slice(0, colors));
+    lines_game.setOption(Lines.OPTIONS.COLORS_ENABLED, _.values(Lines.COLORS).slice(0, color_amount));
     lines_game.start();
 
     if (field_view)
@@ -55,10 +54,6 @@ require([
       history.pushState(null, null, '#/new');  
     }
   }
-
-  // @todo:
-  // tests for UI:
-  //   - next colors
 
   var routes = {
     '/': startGame,
