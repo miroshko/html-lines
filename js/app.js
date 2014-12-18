@@ -4,7 +4,9 @@ require.config({
   baseUrl: 'js',
   paths: {
     'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
-    'vue': '//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min' ,
+    'text': '//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text',
+    // 'vue': '//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min' ,
+    'vue': '//cdnjs.cloudflare.com/ajax/libs/vue/0.11.4/vue.min' ,
     'director': '//cdn.jsdelivr.net/director/1.1.9/director.min',
     'q': '//cdnjs.cloudflare.com/ajax/libs/q.js/1.0.1/q.js'
   }
