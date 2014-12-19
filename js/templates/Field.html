@@ -13,9 +13,10 @@
   <aside class="next-balls side-panel">Next: 
     <span v-repeat="random_colors_queue" class="ball ball-{{ $value }}"></span> 
   </aside> 
-  <div> 
+
+  <div>
     <div v-repeat="field.cells" class="row"> 
-      <field-cell v-repeat="$value" class="tile"> 
+      <field-cell v-repeat="field.cells[$index]" class="tile"> 
       </field-cell> 
     </div> 
   </div> 

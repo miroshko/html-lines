@@ -18,7 +18,8 @@ define(['lodash'], function(_) {
           y: i,
           x: j,
           color: null,
-          color_virtual: null
+          color_virtual: null,
+          selected: false
         };
       }  
     }
